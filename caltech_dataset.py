@@ -38,7 +38,7 @@ class Caltech(VisionDataset):
                     data[i][1] = parts[1]
                     i+=1
                 self.data = data
-                return data
+                # return data
         else:
                 print(f"The file '{file_path}' does not exist.")
         '''
