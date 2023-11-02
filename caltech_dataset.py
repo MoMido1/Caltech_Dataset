@@ -30,15 +30,25 @@ class Caltech(VisionDataset):
                 # Read the contents of the file
                 file_contents = file.read()
                 file_contents = file_contents.split()
-                data = np.empty((len(file_contents),2),dtype=object)
+                data = np.empty((len(file_contents),3),dtype=object)
                 i =0
+                class_index =-1
+                oldClass =''
                 for line in file_contents:
                     parts = line.split('/')
-                    data[i][0] = parts[0]
+                    if parts[0] == oldClass:
+                        data[i][0] = class_index
+
+                    else:
+                        class_index +=1
+                        data[i][0] = class_index
+                        oldClass = parts[0]
+
                     data[i][1] = parts[1]
+                    data[i][2] = parts[0]
                     i+=1
                 self.data = data
-                # return data
+                print(data) 
         else:
                 print(f"The file '{file_path}' does not exist.")
         '''
@@ -59,7 +69,7 @@ class Caltech(VisionDataset):
         Returns:
             tuple: (sample, target) where target is class_index of the target class.
         '''
-        pth = os.path.join(self.root,'101_ObjectCategories',self.data[index,0],self.data[index,1])
+        pth = os.path.join(self.root,'101_ObjectCategories',self.data[index,2],self.data[index,1])
         # os.path.join(root , split +'.txt')
         image = pil_loader(pth)
         label = self.data[index,0]
